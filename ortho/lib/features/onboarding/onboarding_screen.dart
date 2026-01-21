@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ortho/features/homescreen/home_screen.dart';
+import 'dart:async';
+import 'package:ortho/features/homescreen/home_screen.dart'; // Ensure path is correct
 import 'onboarding_model.dart';
-
 
 class CarouselOnboarding extends StatefulWidget {
   const CarouselOnboarding({super.key});
@@ -13,34 +13,36 @@ class CarouselOnboarding extends StatefulWidget {
 class _CarouselOnboardingState extends State<CarouselOnboarding> {
   late PageController _pageController;
   double _pageOffset = 0;
+  Timer? _autoTimer;
+  int _currentPage = 0;
 
   final List<OrthoCard> cards = [
     OrthoCard(
       title: "Orthopedic Knowledge",
-      number: "",
-      description: "Bones, joints, fractures & disorders explained clearly",
-      color: const Color(0xFF64B5F6),
+      number: "01",
+      description: "Bones, joints, fractures & disorders explained with clinical precision.",
+      color: const Color(0xFF6366F1), // Electric Indigo
       image: "assets/onboarding/onboarding_2.png",
     ),
     OrthoCard(
-      title: "AI Ortho Research",
-      number: "",
-      description: "NER, Summarizer & Predictor for medical research",
-      color: const Color(0xFF81C784),
+      title: "AI Research Tools",
+      number: "02",
+      description: "Utilize NER & Predictor models for advanced medical data processing.",
+      color: const Color(0xFF10B981), // Emerald
       image: "assets/onboarding/onboarding_1.png",
     ),
     OrthoCard(
-      title: "Doctors & Specialists",
-      number: "",
-      description: "Find orthopaedicians by specialization & city",
-      color: const Color(0xFF4FC3F7),
+      title: "Specialist Network",
+      number: "03",
+      description: "Connect with verified orthopedic surgeons across major medical hubs.",
+      color: const Color(0xFFF59E0B), // Amber
       image: "assets/onboarding/on.jpg",
     ),
     OrthoCard(
-      title: "Implants & Resources",
-      number: "",
-      description: "Orthopedic implants, books & research papers",
-      color: const Color(0xFFBA68C8),
+      title: "Clinical Resources",
+      number: "04",
+      description: "Access curated implants, research papers, and academic publications.",
+      color: const Color(0xFFEC4899), // Pink
       image: "assets/onboarding/onboarding_3.png",
     ),
   ];
@@ -48,229 +50,288 @@ class _CarouselOnboardingState extends State<CarouselOnboarding> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(viewportFraction: 0.85)
+    _pageController = PageController(viewportFraction: 0.82)
       ..addListener(() {
         setState(() {
           _pageOffset = _pageController.page ?? 0;
         });
       });
+    
+    // Start Auto Carousel
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _autoTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_currentPage < cards.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      if (_pageController.hasClients) {
+        _pageController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 600),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final activeColor = cards[_pageOffset.round()].color;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF050505),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            _buildBackgroundGlow(),
+      backgroundColor: const Color(0xFF030708),
+      body: Stack(
+        children: [
+          // 1. Dynamic Background Mesh Glow
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 1000),
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: const Alignment(0, -0.2),
+                radius: 1.5,
+                colors: [
+                  activeColor.withOpacity(0.12),
+                  const Color(0xFF030708),
+                ],
+              ),
+            ),
+          ),
 
-            Column(
+          SafeArea(
+            child: Column(
               children: [
-                /// ───────── TOP AREA ─────────
+                /// ───────── TOP BAR ─────────
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _goNext,
-                      child: const Text("Skip"),
-                    ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "RUSA 2.0",
+                        style: TextStyle(
+                          color: Colors.white30,
+                          letterSpacing: 3,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _goNext,
+                        child: Text(
+                          "SKIP",
+                          style: TextStyle(color: activeColor, fontSize: 12, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
-                const SizedBox(height: 6),
-
+                const SizedBox(height: 20),
+                
+                // Title Section
+                const Text(
+                  "UNIVERSITY OF MADRAS",
+                  style: TextStyle(color: Colors.white54, fontSize: 10, letterSpacing: 4),
+                ),
+                const SizedBox(height: 8),
                 const Text(
                   "ORTHO-HUB",
-                  style: TextStyle(
-                    letterSpacing: 6,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w300,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 1),
                 ),
 
-                /// ───────── CENTER AREA (TRUE CENTER) ─────────
+                /// ───────── CAROUSEL AREA ─────────
                 Expanded(
-                  child: Center(
-                    child: SizedBox(
-                      width: size.width * 0.88,
-                      height: size.height * 0.55,
-                      child: _buildCarousel(),
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: (index) => _currentPage = index,
+                    itemCount: cards.length,
+                    itemBuilder: (context, index) {
+                      double progress = index - _pageOffset;
+                      return _buildFuturisticCard(cards[index], progress);
+                    },
+                  ),
+                ),
+
+                /// ───────── BOTTOM CONTROLS ─────────
+                _buildIndicator(activeColor),
+
+                const SizedBox(height: 30),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 400),
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: activeColor.withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: activeColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        elevation: 0,
+                      ),
+                      onPressed: _goNext,
+                      child: Text(
+                        _pageOffset.round() == cards.length - 1 ? "INITIALIZE HUB" : "CONTINUE",
+                        style: const TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                      ),
                     ),
                   ),
                 ),
 
-                /// ───────── BOTTOM AREA ─────────
-                _buildIndicator(),
+                const SizedBox(height: 30),
 
-                const SizedBox(height: 18),
+                const Text(
+                  "Clinical Decision Support System\nData Integrity & Encryption Active",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 10, color: Colors.white24, height: 1.5),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-                if (_pageOffset.round() == cards.length - 1)
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cards.last.color,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 14,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+  Widget _buildFuturisticCard(OrthoCard card, double progress) {
+    // 3D Rotation and Scaling
+    final rotation = progress * 0.4;
+    final scale = 1.0 - (progress.abs() * 0.1);
+
+    return Transform(
+      transform: Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateY(rotation),
+      alignment: Alignment.center,
+      child: Transform.scale(
+        scale: scale,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 40, horizontal: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            boxShadow: [
+              BoxShadow(
+                color: card.color.withOpacity(0.15),
+                blurRadius: 30,
+                offset: const Offset(0, 20),
+              )
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(40),
+            child: Stack(
+              children: [
+                // Image
+                Positioned.fill(
+                  child: Image.asset(card.image, fit: BoxFit.cover),
+                ),
+                // Gradient Overlay
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withOpacity(0.3),
+                          Colors.black.withOpacity(0.9),
+                        ],
                       ),
                     ),
-                    onPressed: _goNext,
-                    child: const Text("Get Started"),
                   ),
-
-                const SizedBox(height: 12),
-
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    "Educational & clinical insights only.\nNot for diagnosis.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 11, color: Colors.white38),
+                ),
+                // Content
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        card.number,
+                        style: TextStyle(
+                          color: card.color.withOpacity(0.8),
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        card.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        card.description,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.6),
+                          fontSize: 14,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Glass-morphism Border
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    border: Border.all(color: Colors.white.withOpacity(0.15), width: 1.5),
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// BACKGROUND GLOW
-  Widget _buildBackgroundGlow() {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      decoration: BoxDecoration(
-        gradient: RadialGradient(
-          center: const Alignment(0, -0.3),
-          radius: 1.2,
-          colors: [
-            cards[_pageOffset.round()].color.withOpacity(0.18),
-            Colors.transparent,
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// CENTERED CAROUSEL
-  Widget _buildCarousel() {
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: cards.length,
-      itemBuilder: (context, index) {
-        double progress = index - _pageOffset;
-
-        return Transform(
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
-            ..rotateY(progress * 0.35)
-            ..translate(progress * 30),
-          alignment: Alignment.center,
-          child: Opacity(
-            opacity: (1 - progress.abs()).clamp(0.5, 1.0),
-            child: _buildImageCard(cards[index], progress),
           ),
-        );
-      },
-    );
-  }
-
-  /// IMAGE-FILLED CARD
-  Widget _buildImageCard(OrthoCard card, double progress) {
-    double scale = 1 - (progress.abs() * 0.12);
-
-    return Transform.scale(
-      scale: scale,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Stack(
-          children: [
-            Positioned.fill(child: Image.asset(card.image, fit: BoxFit.cover)),
-
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black.withOpacity(0.15),
-                      Colors.black.withOpacity(0.7),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: card.color.withOpacity(0.4),
-                  width: 1.5,
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(26),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    card.number,
-                    style: TextStyle(
-                      fontSize: 42,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    card.title,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    card.description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.75),
-                      height: 1.4,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
   }
 
-  /// INDICATOR
-  Widget _buildIndicator() {
+  Widget _buildIndicator(Color activeColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(cards.length, (index) {
         double active = (1 - (index - _pageOffset).abs()).clamp(0, 1);
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
-          height: 2,
-          width: 22 + (22 * active),
+          height: 4,
+          width: 8 + (24 * active),
           decoration: BoxDecoration(
-            color: active > 0.5 ? cards[index].color : Colors.white12,
+            color: active > 0.5 ? activeColor : Colors.white10,
             borderRadius: BorderRadius.circular(2),
+            boxShadow: [
+              if (active > 0.5) 
+                BoxShadow(color: activeColor.withOpacity(0.5), blurRadius: 8)
+            ],
           ),
         );
       }),
@@ -278,10 +339,16 @@ class _CarouselOnboardingState extends State<CarouselOnboarding> {
   }
 
   void _goNext() {
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(builder: (_) => const OrthoHubShell()),
-  );
-}
-
+    _autoTimer?.cancel();
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const OrthoHubShell(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        transitionDuration: const Duration(milliseconds: 800),
+      ),
+    );
+  }
 }

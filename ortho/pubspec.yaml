@@ -38,6 +38,8 @@ dependencies:
   
   video_player: ^2.8.1
   lottie: ^3.1.2
+  url_launcher: ^6.3.2
+  file_picker: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/onboarding/
+    - assets/implants/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
