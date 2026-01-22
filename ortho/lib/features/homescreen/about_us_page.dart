@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});
