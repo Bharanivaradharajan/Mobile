@@ -203,7 +203,7 @@ class OrthoSectionDetail extends StatelessWidget {
                 const SizedBox(height: 40),
                 _sectionLabel("KEY CLINICAL PARAMETERS"),
                 const SizedBox(height: 20),
-                ...article.points.map((p) => _buildPointRow(p)).toList(),
+                ...article.points.map((p) => _buildPointRow(p)),
                 const SizedBox(height: 50),
               ],
             ),

@@ -4,7 +4,6 @@ import 'package:ortho/features/homescreen/ai_research_page.dart';
 import 'package:ortho/features/homescreen/ai_tool_dynamic_page.dart';
 import 'package:ortho/features/homescreen/ortho_hub_page.dart';
 import 'package:ortho/features/homescreen/ortho_implants_page.dart';
-import 'package:ortho/features/homescreen/ortho_section_detail.dart';
 import 'package:ortho/features/homescreen/resources_page.dart';
 import 'dart:ui';
 import 'dart:async';
@@ -15,9 +14,7 @@ import 'package:video_player/video_player.dart';
 import 'long_form_data.dart';
 import 'doctors_page.dart';
 import 'package:flutter/services.dart';
-import 'dart:ui';
-import 'package:flutter/material.dart'; // for HapticFeedback
-import 'package:flutter/services.dart';
+// for HapticFeedback
 
 
 // 1. THE MAIN SHELL - This holds the persistent Title Bar and Navbar
@@ -47,6 +44,7 @@ class _OrthoHubShellState extends State<OrthoHubShell> {
     const AIResearchPage(),
     const ResourcesPage(),
     const OrthoHubPage(),
+    const AuthScreen(),
     
      // Your main dashboard
     const Center(

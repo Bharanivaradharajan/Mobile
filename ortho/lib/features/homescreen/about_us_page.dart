@@ -149,7 +149,7 @@ class AboutUsPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            "A collaborative flagship initiative under RUSA 2.0, developed at the University of Madras. We bridge the gap between complex digital data and surgical practice through advanced mobile intelligence.",
+            "RUSA 2.0-RI & QI-BioMaterials-NAo Informatics on the role of Nano-HAP in orthopedic",
             style: TextStyle(color: Colors.white.withOpacity(0.5), fontSize: 14, height: 1.7),
           ),
         ],
@@ -161,30 +161,23 @@ class AboutUsPage extends StatelessWidget {
     return Column(
       children: [
         _animatedProfileCard(
-          "Principal Investigator", 
-          "Dr. S. Ramasamy", 
-          "Senior Faculty, University of Madras", 
-          Icons.account_balance_rounded,
-          const Color(0xFF6366F1), // Indigo
-        ),
-        _animatedProfileCard(
           "Project Coordinator", 
-          "Dr. G. Sundar", 
-          "RUSA 2.0 Strategic Lead", 
+          "Dr. B. Lavanya", 
+          "Associate Professor Dept.of.Computer Science UNOM", 
           Icons.biotech_rounded,
           const Color(0xFF10B981), // Emerald
         ),
         _animatedProfileCard(
-          "Software Architect", 
-          "V. Jeyachandran", 
-          "Lead Developer • Full-Stack Systems", 
+          "Intern-Mobile Application Developement", 
+          "V.Bharani Dharan", 
+          "• Full-Stack Mobile Application Developement", 
           Icons.terminal_rounded,
           const Color(0xFFF59E0B), // Amber
         ),
         _animatedProfileCard(
           "Research Scholar", 
-          "K. Anitha", 
-          "PhD Researcher • Data Analysis", 
+          "M.Sasipriya", 
+          "PhD Researcher • Data Analysis - Web Developement", 
           Icons.auto_awesome_mosaic_rounded,
           const Color(0xFFEC4899), // Pink
         ),

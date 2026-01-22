@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ortho/features/homescreen/dynamic_resource_listing_page.dart';
-import 'dynamic_resource_listing_page.dart'; // Ensure this file exists
+// Ensure this file exists
 
 class ResourcesPage extends StatelessWidget {
   const ResourcesPage({super.key});
@@ -138,6 +138,7 @@ class ResourcesPage extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) => DynamicResourceListing(
+                  key: UniqueKey(),
                   category: title,
                   themeColor: colors[0],
                 ),
