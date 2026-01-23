@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:ui';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -36,7 +35,7 @@ class _AuthScreenState extends State<AuthScreen> {
     {'value': 'PROFESSOR', 'label': 'Professor'},
   ];
 
-  final String _baseUrl = "http://192.168.2.163:8000/api"; 
+  final String _baseUrl = "http://192.168.2.103:8000/api"; 
 
   @override
   void initState() {

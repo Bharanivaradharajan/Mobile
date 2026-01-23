@@ -17,7 +17,7 @@ class DynamicResourceListing extends StatefulWidget {
 
 class _DynamicResourceListingState extends State<DynamicResourceListing> {
   final TextEditingController _searchController = TextEditingController();
-  final String _baseUrl = "http://192.168.2.163:8000/api/resources/";
+  final String _baseUrl = "http://192.168.2.103:8000/api/resources/";
   late Future<List<dynamic>> _resourceFuture;
   Timer? _debounce;
 
@@ -229,7 +229,7 @@ class _DynamicResourceListingState extends State<DynamicResourceListing> {
     final String? rawPath = item['thumbnail']?.toString();
 
     String finalImageUrl = rawPath != null && rawPath.isNotEmpty 
-        ? (rawPath.startsWith('http') ? rawPath : "http://192.168.2.163:8000/${rawPath.startsWith('/') ? rawPath.substring(1) : rawPath}")
+        ? (rawPath.startsWith('http') ? rawPath : "http://192.168.2.103:8000/${rawPath.startsWith('/') ? rawPath.substring(1) : rawPath}")
         : "https://via.placeholder.com/150x200";
 
     return TweenAnimationBuilder(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ortho/features/homescreen/auth_screen.dart';
 import 'features/onboarding/onboarding_screen.dart'; 
 // IMPORTANT: Ensure the path below matches your project structure
-import 'features/homescreen/auth_screen.dart'; 
 
 void main() {
   runApp(const OrthopedicApp());
